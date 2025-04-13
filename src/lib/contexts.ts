@@ -4,6 +4,7 @@ type GameSettings = {
   playfieldDimensions: [number, number];
   noteSpeed: number;
   approachDistance: number;
+  fadeDistance: number;
 };
 
 export const TimePositionContext = createContext<
@@ -12,5 +13,6 @@ export const TimePositionContext = createContext<
 export const SettingsContext = createContext<GameSettings>({
   playfieldDimensions: [0, 0],
   noteSpeed: 0,
-  approachDistance: 0
+  approachDistance: 0,
+  fadeDistance: 0
 });

@@ -58,11 +58,12 @@ function App() {
           value={{
             playfieldDimensions: [12, 8],
             noteSpeed: 5000,
-            approachDistance: 30
+            approachDistance: 100,
+            fadeDistance: 40
           }}
         >
           <HitWindow />
-          <Notes chart={level} />
+          {level != undefined && <Notes chart={level} />}
         </SettingsContext.Provider>
       </Canvas>
     </div>
