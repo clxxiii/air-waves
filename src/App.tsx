@@ -4,6 +4,9 @@ import HitWindow from "./lib/components/HitWindow";
 import { SettingsContext } from "./lib/contexts";
 import { parse } from "./lib/ChartParser";
 import Notes from "./lib/components/Notes";
+import Menu from './lib/components/Menu.tsx';
+import Game from './lib/components/Game'; 
+import Score from './lib/components/Score.tsx';
 
 function Lighting() {
   return (
@@ -37,6 +40,8 @@ function Three() {
 }
 
 function App() {
+  const [screen, setScreen] = useState<'menu' | 'game' | 'score' >('menu');
+  const [score, setScore] = useState(100);
   const [level, setLevel] = useState<ChartFile.Chart>();
 
   useEffect(() => {
@@ -66,6 +71,11 @@ function App() {
           {level != undefined && <Notes chart={level} />}
         </SettingsContext.Provider>
       </Canvas>
+      <div className="App">
+        {screen === 'menu' && <Menu setScreen={setScreen} />}
+        {screen === 'game' && <Game setScreen={setScreen} setScore={setScore} />}
+        {screen === 'score' && <Score score={score} setScreen={setScreen} />}
+    </div>
     </div>
   );
 }
