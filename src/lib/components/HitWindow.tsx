@@ -7,9 +7,9 @@ function HitWindow() {
   } = useContext(SettingsContext);
 
   return (
-    <mesh position={[0, 0, 0]}>
+    <mesh position={[0, 0, 0]} visible={false}>
       <planeGeometry args={[playfieldX, playfieldY]} />
-      <meshBasicMaterial wireframe={true} />
+      <meshBasicMaterial />
     </mesh>
   );
 }

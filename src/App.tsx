@@ -24,8 +24,8 @@ function Lighting() {
 function Three() {
   useThree((state) => {
     state.camera.position.x = 0;
-    state.camera.position.y = 2;
-    state.camera.position.z = 10;
+    state.camera.position.y = 3;
+    state.camera.position.z = 5; 
 
     // Lock camera angle to center
     const y = Math.atan2(state.camera.position.x, state.camera.position.z);
