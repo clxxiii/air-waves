@@ -7,6 +7,8 @@ import Notes from "./lib/components/Notes";
 import Menu from "./lib/components/Menu.tsx";
 import Game from "./lib/components/Game";
 import Score from "./lib/components/Score.tsx";
+import HandTrackingCanvas from "./lib/components/HandTrackingCanvas";
+import { FingerStateProvider } from "./lib/context/FingerStateContext";
 
 function Lighting() {
   return (
@@ -46,31 +48,34 @@ function App() {
 
   return (
     <div className="h-screen w-screen absolute top-0 left-0">
-      {level ? (
-        <Canvas>
-          <Three />
-          <Lighting />
-          <SettingsContext.Provider
-            value={{
-              playfieldDimensions: [12, 8],
-              noteSpeed: 5000,
-              approachDistance: 100,
-              fadeDistance: 40
-            }}
-          >
-            <HitWindow />
-            {level != undefined && <Notes level={level} />}
-          </SettingsContext.Provider>
-        </Canvas>
-      ) : (
-        <div className="App">
-          {screen === "menu" && <Menu setScreen={setScreen} />}
-          {screen === "game" && (
-            <Game setScreen={setScreen} setLevel={setLevel} />
-          )}
-          {screen === "score" && <Score score={score} setScreen={setScreen} />}
-        </div>
-      )}
+      <FingerStateProvider>
+        {level ? (
+          <Canvas>
+            <Three />
+            <Lighting />
+            <SettingsContext.Provider
+              value={{
+                playfieldDimensions: [12, 8],
+                noteSpeed: 5000,
+                approachDistance: 100,
+                fadeDistance: 40
+              }}
+            >
+              <HitWindow />
+              {level != undefined && <Notes level={level} />}
+            </SettingsContext.Provider>
+          </Canvas>
+        ) : (
+          <div className="App">
+            {screen === "menu" && <Menu setScreen={setScreen} />}
+            {screen === "game" && (
+              <Game setScreen={setScreen} setLevel={setLevel} />
+            )}
+            {screen === "score" && <Score score={score} setScreen={setScreen} />}
+          </div>
+        )}
+                      <HandTrackingCanvas />
+      </FingerStateProvider>
     </div>
   );
 }
