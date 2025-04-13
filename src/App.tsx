@@ -71,10 +71,12 @@ function App() {
             {screen === "game" && (
               <Game setScreen={setScreen} setLevel={setLevel} />
             )}
-            {screen === "score" && <Score score={score} setScreen={setScreen} />}
+            {screen === "score" && (
+              <Score score={score} setScreen={setScreen} />
+            )}
           </div>
         )}
-                      <HandTrackingCanvas />
+        <HandTrackingCanvas />
       </FingerStateProvider>
     </div>
   );

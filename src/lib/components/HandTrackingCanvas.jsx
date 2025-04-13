@@ -17,7 +17,7 @@ const HandTrackingCanvas = () => {
           { name: "indexFinger", tip: landmarks[8] },
           { name: "middleFinger", tip: landmarks[12] },
           { name: "ringFinger", tip: landmarks[16] },
-          { name: "pinky", tip: landmarks[20] },
+          { name: "pinky", tip: landmarks[20] }
         ];
 
         fingers.forEach(({ name, tip }) => {
@@ -47,13 +47,12 @@ const HandTrackingCanvas = () => {
       const model = await handpose.load();
 
       const video = document.createElement("video");
-      video.style.display = "none"; 
-      document.body.appendChild(video); 
+      video.style.display = "none";
 
       const startVideo = async () => {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({
-            video: true,
+            video: true
           });
           video.srcObject = stream;
           await video.play();
@@ -66,7 +65,7 @@ const HandTrackingCanvas = () => {
       const detectHands = async () => {
         if (video.readyState === 4) {
           const predictions = await model.estimateHands(video, {
-            flipHorizontal: false,
+            flipHorizontal: false
           });
           processHandData(predictions);
         }
@@ -86,7 +85,7 @@ const HandTrackingCanvas = () => {
     loadModelAndTrackHands();
   }, []);
 
-  return null; 
+  return null;
 };
 
 export default HandTrackingCanvas;

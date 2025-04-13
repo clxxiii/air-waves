@@ -66,10 +66,10 @@ function Notes(props: { level: string }) {
                 <Note note={note} key={k} />
               ))}
           </TimePositionContext.Provider>
-          <Tile color={0x54bed8} position={[-4, -1, 0]} />
-          <Tile color={0xe15971} position={[-1.3, -1, 0]} />
-          <Tile color={0xffe113} position={[1.3, -1, 0]} />
-          <Tile color={0x8f48b7} position={[4, -1, 0]} />
+          <Tile name="indexFinger" color={0x54bed8} position={[-4, -1, 0]} />
+          <Tile name="middleFinger" color={0xe15971} position={[-1.3, -1, 0]} />
+          <Tile name="ringFinger" color={0xffe113} position={[1.3, -1, 0]} />
+          <Tile name="pinky" color={0x8f48b7} position={[4, -1, 0]} />
         </>
       )}
     </>
