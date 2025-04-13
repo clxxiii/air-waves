@@ -4,9 +4,9 @@ import HitWindow from "./lib/components/HitWindow";
 import { SettingsContext } from "./lib/contexts";
 import { parse } from "./lib/ChartParser";
 import Notes from "./lib/components/Notes";
-import Menu from './lib/components/Menu.tsx';
-import Game from './lib/components/Game'; 
-import Score from './lib/components/Score.tsx';
+import Menu from "./lib/components/Menu.tsx";
+import Game from "./lib/components/Game";
+import Score from "./lib/components/Score.tsx";
 
 function Lighting() {
   return (
@@ -28,7 +28,7 @@ function Three() {
   useThree((state) => {
     state.camera.position.x = 0;
     state.camera.position.y = 3;
-    state.camera.position.z = 5; 
+    state.camera.position.z = 5;
 
     // Lock camera angle to center
     const y = Math.atan2(state.camera.position.x, state.camera.position.z);
@@ -40,42 +40,37 @@ function Three() {
 }
 
 function App() {
-  const [screen, setScreen] = useState<'menu' | 'game' | 'score' >('menu');
+  const [screen, setScreen] = useState<"menu" | "game" | "score">("menu");
   const [score, setScore] = useState(100);
-  const [level, setLevel] = useState<ChartFile.Chart>();
-
-  useEffect(() => {
-    fetch("/hello/waves.chart").then((r) => {
-      r.text().then((text) => {
-        const parsed = parse(text);
-        console.log(parsed);
-        setLevel(parsed);
-      });
-    });
-  }, []);
+  const [level, setLevel] = useState<string | null>(null);
 
   return (
-    <div className="h-screen w-screen">
-      <Canvas>
-        <Three />
-        <Lighting />
-        <SettingsContext.Provider
-          value={{
-            playfieldDimensions: [12, 8],
-            noteSpeed: 5000,
-            approachDistance: 100,
-            fadeDistance: 40
-          }}
-        >
-          <HitWindow />
-          {level != undefined && <Notes chart={level} />}
-        </SettingsContext.Provider>
-      </Canvas>
-      <div className="App">
-        {screen === 'menu' && <Menu setScreen={setScreen} />}
-        {screen === 'game' && <Game setScreen={setScreen} setScore={setScore} />}
-        {screen === 'score' && <Score score={score} setScreen={setScreen} />}
-    </div>
+    <div className="h-screen w-screen absolute top-0 left-0">
+      {level ? (
+        <Canvas>
+          <Three />
+          <Lighting />
+          <SettingsContext.Provider
+            value={{
+              playfieldDimensions: [12, 8],
+              noteSpeed: 5000,
+              approachDistance: 100,
+              fadeDistance: 40
+            }}
+          >
+            <HitWindow />
+            {level != undefined && <Notes level={level} />}
+          </SettingsContext.Provider>
+        </Canvas>
+      ) : (
+        <div className="App">
+          {screen === "menu" && <Menu setScreen={setScreen} />}
+          {screen === "game" && (
+            <Game setScreen={setScreen} setLevel={setLevel} />
+          )}
+          {screen === "score" && <Score score={score} setScreen={setScreen} />}
+        </div>
+      )}
     </div>
   );
 }
