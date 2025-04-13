@@ -6,25 +6,13 @@ import { FingerStateContext } from "../context/FingerStateContext";
 
 const HandTrackingCanvas = () => {
   const videoRef = useRef(null);
-  const canvasRef = useRef(null);
-  const { fingerInRange, setFingerInRange } = useContext(FingerStateContext);
+  const { setFingerInRange } = useContext(FingerStateContext);
 
-  const fingerJoints = {
-    thumb: [0, 1, 2, 3, 4],
-    indexFinger: [0, 5, 6, 7, 8],
-    middleFinger: [0, 9, 10, 11, 12],
-    ringFinger: [0, 13, 14, 15, 16],
-    pinky: [0, 17, 18, 19, 20],
-  };
-
-  const drawHand = (predictions, ctx) => {
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
+  const processHandData = (predictions) => {
     if (predictions.length > 0) {
       predictions.forEach((prediction) => {
         const landmarks = prediction.landmarks;
-
-        const thumbTip = landmarks[4]; 
+        const thumbTip = landmarks[4];
 
         const fingers = [
           { name: "indexFinger", tip: landmarks[8] },
@@ -50,45 +38,6 @@ const HandTrackingCanvas = () => {
             return prevState;
           });
         });
-
-        ctx.beginPath();
-        ctx.moveTo(landmarks[0][0], landmarks[0][1]);
-        [1, 5, 9, 13, 17, 0].forEach((index) => {
-          ctx.lineTo(landmarks[index][0], landmarks[index][1]);
-        });
-        ctx.closePath();
-        ctx.fillStyle = "rgba(255, 192, 203, 1)";
-        ctx.fill();
-
-        for (let j = 0; j < Object.keys(fingerJoints).length; j++) {
-          let finger = Object.keys(fingerJoints)[j];
-          for (let k = 0; k < fingerJoints[finger].length - 1; k++) {
-            const firstJointIndex = fingerJoints[finger][k];
-            const secondJointIndex = fingerJoints[finger][k + 1];
-
-            ctx.beginPath();
-            ctx.moveTo(
-              landmarks[firstJointIndex][0],
-              landmarks[firstJointIndex][1]
-            );
-            ctx.lineTo(
-              landmarks[secondJointIndex][0],
-              landmarks[secondJointIndex][1]
-            );
-            ctx.strokeStyle = "plum";
-            ctx.lineWidth = 4;
-            ctx.stroke();
-          }
-        }
-
-        for (let i = 0; i < landmarks.length; i++) {
-          const x = landmarks[i][0];
-          const y = landmarks[i][1];
-          ctx.beginPath();
-          ctx.arc(x, y, 6, 0, 3 * Math.PI);
-          ctx.fillStyle = "gold";
-          ctx.fill();
-        }
       });
     }
   };
@@ -114,11 +63,10 @@ const HandTrackingCanvas = () => {
 
       const detectHands = async () => {
         if (video.readyState === 4) {
-          const ctx = canvasRef.current.getContext("2d");
           const predictions = await model.estimateHands(video, {
             flipHorizontal: false,
           });
-          drawHand(predictions, ctx);
+          processHandData(predictions);
         }
         requestAnimationFrame(detectHands);
       };
@@ -130,22 +78,7 @@ const HandTrackingCanvas = () => {
     loadModelAndTrackHands();
   }, []);
 
-  return (
-    <div>
-      <video
-        ref={videoRef}
-        style={{ display: "none" }}
-        width="1920"
-        height="480"
-      />
-      <canvas
-        ref={canvasRef}
-        width="1920"
-        height="1080"
-        style={{ border: "1px solid black" }}
-      />
-    </div>
-  );
+  return null; 
 };
 
 export default HandTrackingCanvas;
