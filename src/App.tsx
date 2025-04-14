@@ -7,7 +7,6 @@ import Notes from "./lib/components/Notes";
 import Menu from "./lib/components/Menu.tsx";
 import Game from "./lib/components/Game";
 import Score from "./lib/components/Score.tsx";
-import HandTrackingCanvas from "./lib/components/HandTrackingCanvas";
 import { FingerStateProvider } from "./lib/context/FingerStateContext";
 
 function Lighting() {
