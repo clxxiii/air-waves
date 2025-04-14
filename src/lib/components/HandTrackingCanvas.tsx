@@ -64,9 +64,7 @@ const HandTrackingCanvas = () => {
 
       const detectHands = async () => {
         if (video.readyState === 4) {
-          const predictions = await model.estimateHands(video, {
-            flipHorizontal: false
-          });
+          const predictions = await model.estimateHands(video, false);
           processHandData(predictions);
         }
         requestAnimationFrame(detectHands);
@@ -85,7 +83,7 @@ const HandTrackingCanvas = () => {
     loadModelAndTrackHands();
   }, []);
 
-  return null;
+  return <></>;
 };
 
 export default HandTrackingCanvas;
