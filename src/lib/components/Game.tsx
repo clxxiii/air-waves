@@ -8,7 +8,9 @@ type Song = {
 };
 
 type Props = {
-  setScreen: React.Dispatch<React.SetStateAction<"menu" | "game" | "score">>;
+  setScreen: React.Dispatch<
+    React.SetStateAction<"menu" | "game" | "score" | "demo">
+  >;
   setLevel: React.Dispatch<React.SetStateAction<string | null>>;
 };
 

@@ -61,6 +61,7 @@ function Notes(props: { level: string }) {
     <>
       {!loading && (
         <>
+          <HandTrackingCanvas />
           <TimePositionContext.Provider value={[timePosition, setTimePosition]}>
             {chart && (<HandTrackingCanvas />)}
             {chart &&

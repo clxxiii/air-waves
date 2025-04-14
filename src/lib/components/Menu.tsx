@@ -1,7 +1,9 @@
 import { useEffect } from "react";
 
 type Props = {
-  setScreen: React.Dispatch<React.SetStateAction<"menu" | "game" | "score">>;
+  setScreen: React.Dispatch<
+    React.SetStateAction<"menu" | "game" | "score" | "demo">
+  >;
 };
 
 const Menu = ({ setScreen }: Props) => {
@@ -28,6 +30,14 @@ const Menu = ({ setScreen }: Props) => {
           className="play-image"
           onClick={() => setScreen("game")}
         />
+      </div>
+      <div className="button-container">
+        <button
+          className="text-white bg-pink-400 rounded"
+          onClick={() => setScreen("demo")}
+        >
+          demo
+        </button>
       </div>
     </div>
   );

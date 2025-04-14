@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import HitWindow from "./lib/components/HitWindow";
 import { SettingsContext } from "./lib/contexts";
-import { parse } from "./lib/ChartParser";
 import Notes from "./lib/components/Notes";
 import Menu from "./lib/components/Menu.tsx";
 import Game from "./lib/components/Game";
 import Score from "./lib/components/Score.tsx";
+import Demo from "./lib/components/Demo.tsx";
 import { FingerStateProvider } from "./lib/context/FingerStateContext";
 
 function Lighting() {
@@ -41,7 +41,9 @@ function Three() {
 }
 
 function App() {
-  const [screen, setScreen] = useState<"menu" | "game" | "score">("menu");
+  const [screen, setScreen] = useState<"menu" | "game" | "score" | "demo">(
+    "menu"
+  );
   const [score, setScore] = useState(100);
   const [level, setLevel] = useState<string | null>(null);
 
@@ -73,6 +75,7 @@ function App() {
             {screen === "score" && (
               <Score score={score} setScreen={setScreen} />
             )}
+            {screen === "demo" && <Demo setScreen={setScreen} />}
           </div>
         )}
       </FingerStateProvider>
