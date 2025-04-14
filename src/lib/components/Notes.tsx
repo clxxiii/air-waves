@@ -3,6 +3,7 @@ import { TimePositionContext } from "../contexts";
 import Note from "./Note";
 import Tile from "./Tile";
 import { parse } from "../ChartParser";
+import HandTrackingCanvas from "./HandTrackingCanvas";
 
 function Notes(props: { level: string }) {
   const { level } = props;
@@ -60,6 +61,7 @@ function Notes(props: { level: string }) {
     <>
       {!loading && (
         <>
+          <HandTrackingCanvas />
           <TimePositionContext.Provider value={[timePosition, setTimePosition]}>
             {chart &&
               chart.notes.expert?.map((note, k) => (

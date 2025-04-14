@@ -2,12 +2,10 @@ import { useEffect, useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import HitWindow from "./lib/components/HitWindow";
 import { SettingsContext } from "./lib/contexts";
-import { parse } from "./lib/ChartParser";
 import Notes from "./lib/components/Notes";
 import Menu from "./lib/components/Menu.tsx";
 import Game from "./lib/components/Game";
 import Score from "./lib/components/Score.tsx";
-import HandTrackingCanvas from "./lib/components/HandTrackingCanvas";
 import { FingerStateProvider } from "./lib/context/FingerStateContext";
 
 function Lighting() {
@@ -76,7 +74,6 @@ function App() {
             )}
           </div>
         )}
-        <HandTrackingCanvas />
       </FingerStateProvider>
     </div>
   );
