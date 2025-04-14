@@ -12,8 +12,19 @@ type Props = {
   setLevel: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const originalSongs: Song[] = [
-  { id: "hello", name: "Soldier Poet King", artist: "The Oh Hellos" }
+const originalSongs: Song[] = [{
+  id: `hello`,
+  name: "Soldier Poet King",
+  artist: "The Oh Hellos",
+},{
+  id: `lorelei`,
+  name: "Lorelei",
+  artist: "Camellia"
+},{
+  id: `pipe-dream`,
+  name: "Pipe Dream",
+  artist: "Animusic"
+},
 ];
 
 const loopedSongs = [...originalSongs, ...originalSongs, ...originalSongs];
@@ -49,10 +60,10 @@ const Game = ({ setScreen, setLevel }: Props) => {
   };
 
   const handleSelectClick = () => {
-    const song = originalSongs.find((x) => x.id == selected);
-    if (!song) return;
-
-    setLevel(song.id);
+      const song = originalSongs.find((x) => x.id == selected);
+      if (!song) return;
+  
+      setLevel(song.id);
   };
 
   useEffect(() => {
@@ -64,11 +75,21 @@ const Game = ({ setScreen, setLevel }: Props) => {
     const handleWheelBound = (e: WheelEvent) => handleWheel(e);
     container.addEventListener("wheel", handleWheelBound, { passive: false });
 
-    return () => container.removeEventListener("wheel", handleWheelBound);
-  }, [scrollIndex, cooldown]);
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === "s") {
+        handleSelectClick();
+      }
+    };
+    window.addEventListener("keydown", handleKeyPress);
+
+    return () => {
+      container.removeEventListener("wheel", handleWheelBound);
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [scrollIndex, cooldown, selected]);
 
   return (
-    <div className="game">
+    <div className="game"> 
       <div className="game-content">
         <img
           src="songselect.png"
@@ -83,19 +104,47 @@ const Game = ({ setScreen, setLevel }: Props) => {
             const isActive = i === scrollIndex;
 
             return (
-              <div
+                <div
                 key={`${song.id}-${i}`}
                 className={`carousel-song ${isActive ? "active" : ""}`}
                 style={{
                   opacity,
                   transform: `scale(${scale})`,
-                  fontWeight: isActive ? "bold" : "normal"
+                  fontWeight: isActive ? "bold" : "normal",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  height: "100px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
                 onClick={() => handleSongClick(song)}
-              >
-                <div className="song-title">{song.name}</div>
-                <div className="song-details">{song.artist}</div>
-              </div>
+                >
+                <div
+                  className="song-title"
+                  style={{
+                  fontSize: "1rem",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  }}
+                >
+                  {song.name}
+                </div>
+                <div
+                  className="song-details"
+                  style={{
+                  fontSize: "0.8rem",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  }}
+                >
+                  {song.artist}
+                </div>
+                </div>
             );
           })}
         </div>
