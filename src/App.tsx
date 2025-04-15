@@ -5,7 +5,7 @@ import Menu from "./lib/components/Menu.tsx";
 import Game from "./lib/components/Game";
 import Score from "./lib/components/Score.tsx";
 import Demo from "./lib/components/Demo.tsx";
-import { FingerStateProvider } from "./lib/context/FingerStateContext";
+import { TipDistanceContext } from "./lib/contexts.ts";
 
 function Lighting() {
   return (
@@ -44,10 +44,11 @@ function App() {
   );
   const [score, setScore] = useState(100);
   const [level, setLevel] = useState<string | null>(null);
+  const distanceState = useState<number[]>([]);
 
   return (
     <div className="h-screen w-screen absolute top-0 left-0">
-      <FingerStateProvider>
+      <TipDistanceContext.Provider value={distanceState}>
         {level ? (
           <Canvas>
             <Three />
@@ -66,7 +67,7 @@ function App() {
             {screen === "demo" && <Demo setScreen={setScreen} />}
           </div>
         )}
-      </FingerStateProvider>
+      </TipDistanceContext.Provider>
     </div>
   );
 }

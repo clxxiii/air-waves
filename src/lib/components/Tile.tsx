@@ -1,12 +1,12 @@
 import { ThreeElements } from "@react-three/fiber";
-import { useFingerContext } from "../context/FingerStateContext";
 import { useState, useEffect } from "react";
+import { useDistanceContext } from "../contexts";
 
 type Finger = "indexFinger" | "middleFinger" | "ringFinger" | "pinky";
 
 function Tile(props: ThreeElements["mesh"] & { color: number; name: Finger }) {
   const { color, name } = props;
-  const { fingerInRange } = useFingerContext();
+  const [distances] = useDistanceContext();
   const [isArrowKeyActive, setIsArrowKeyActive] = useState(false);
 
   useEffect(() => {
@@ -57,7 +57,8 @@ function Tile(props: ThreeElements["mesh"] & { color: number; name: Finger }) {
     };
   }, [name]);
 
-  const isActive = fingerInRange[name] || isArrowKeyActive;
+  const order = ["indexFinger", "middleFinger", "ringFinger", "pinky"]
+  const isActive = distances[order.indexOf(name)] < 0.05 || isArrowKeyActive;
 
   return (
     <mesh {...props} scale={[1, isActive ? 0.8 : 1, 1]}>
