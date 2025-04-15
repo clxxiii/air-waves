@@ -13,25 +13,26 @@ const HandTrackingCanvas = () => {
         const landmarks = prediction.landmarks;
         const thumbTip = landmarks[4];
 
-        const fingerIndices = {
-          indexFinger: 8,
-          middleFinger: 12,
-          ringFinger: 16,
-          pinky: 20,
-        };
+        const fingers = [
+          { name: "indexFinger", tip: landmarks[8] },
+          { name: "middleFinger", tip: landmarks[12] },
+          { name: "ringFinger", tip: landmarks[16] },
+          { name: "pinky", tip: landmarks[20] }
+        ];
 
-        Object.entries(fingerIndices).forEach(([name, index]) => {
-          const tip = landmarks[index];
-          const distance =
-            (tip[0] - thumbTip[0]) ** 2 + (tip[1] - thumbTip[1]) ** 2;
+        fingers.forEach(({ name, tip }) => {
+          const distance = Math.sqrt(
+            Math.pow(tip[0] - thumbTip[0], 2) +
+              Math.pow(tip[1] - thumbTip[1], 2)
+          );
 
           setFingerInRange((prevState) => {
-            const inRange = distance < 2500;
-            if (prevState[name] !== inRange) {
-              console.log(
-                `${name} ${inRange ? "entered" : "left"} the range of the thumb!`
-              );
-              return { ...prevState, [name]: inRange };
+            if (distance < 50 && !prevState[name]) {
+              console.log(`${name} entered the range of the thumb!`);
+              return { ...prevState, [name]: true };
+            } else if (distance >= 50 && prevState[name]) {
+              console.log(`${name} left the range of the thumb!`);
+              return { ...prevState, [name]: false };
             }
             return prevState;
           });
@@ -42,50 +43,43 @@ const HandTrackingCanvas = () => {
 
   useEffect(() => {
     const loadModelAndTrackHands = async () => {
-      try {
-        await tf.setBackend("webgl");
-        const model = await handpose.load();
-        const video = document.createElement("video");
-        video.autoplay = true;
+      await tf.setBackend("webgl");
+      const model = await handpose.load();
 
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        const videoDevices = devices.filter(
-          (device) => device.kind === "videoinput"
-        );
+      const video = document.createElement("video");
+      video.style.display = "none";
 
-        if (videoDevices.length === 0) {
-          console.error("No video input devices found.");
-          return;
+      const startVideo = async () => {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: true
+          });
+          video.srcObject = stream;
+          await video.play();
+          console.log("Camera started successfully.");
+        } catch (error) {
+          console.error("Error accessing the camera:", error);
         }
+      };
 
-        const selectedDeviceId = videoDevices[1]?.deviceId || videoDevices[0].deviceId;
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { deviceId: { exact: selectedDeviceId } },
-        });
+      let frameCount = 0;
+      const detectHands = async () => {
+        if (video.readyState === 4 && frameCount % 2 === 0) {
+          const predictions = await model.estimateHands(video, false);
+          processHandData(predictions);
+        }
+        frameCount++;
+        requestAnimationFrame(detectHands);
+      };
 
-        video.srcObject = stream;
+      await startVideo();
+      detectHands();
 
-        let frameCount = 0;
-        const detectHands = async () => {
-          if (video.readyState === 4 && frameCount % 2 === 0) {
-            const predictions = await model.estimateHands(video, {
-              flipHorizontal: false,
-            });
-            processHandData(predictions);
-          }
-          frameCount++;
-          requestAnimationFrame(detectHands);
-        };
-
-        detectHands();
-
-        return () => {
-          const tracks = video.srcObject?.getTracks();
-          tracks?.forEach((track) => track.stop());
-        };
-      } catch (error) {
-        console.error("Error accessing video or hand tracking:", error);
-      }
+      return () => {
+        const tracks = video.srcObject?.getTracks();
+        tracks?.forEach((track) => track.stop());
+        video.remove();
+      };
     };
 
     loadModelAndTrackHands();
