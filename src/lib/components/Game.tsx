@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 type Song = {
@@ -14,147 +14,106 @@ type Props = {
   setLevel: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const originalSongs: Song[] = [{
-  id: `hello`,
-  name: "Soldier Poet King",
-  artist: "The Oh Hellos",
-},{
-  id: `lorelei`,
-  name: "Lorelei",
-  artist: "Camellia"
-},{
-  id: `pipe-dream`,
-  name: "Pipe Dream",
-  artist: "Animusic"
-},
+const originalSongs: Song[] = [
+  { id: `hello`, name: "Soldier Poet King", artist: "The Oh Hellos" },
+  { id: `lorelei`, name: "Lorelei", artist: "Camellia" },
+  { id: `pipe-dream`, name: "Pipe Dream", artist: "Animusic" },
 ];
 
-const loopedSongs = [...originalSongs, ...originalSongs, ...originalSongs];
-
 const Game = ({ setScreen, setLevel }: Props) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [scrollIndex, setScrollIndex] = useState(
-    Math.floor(loopedSongs.length / 2)
-  );
-  const [cooldown, setCooldown] = useState(false);
-  const [selected, select] = useState<string>(originalSongs[0].id);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const scrollToIndex = (index: number) => {
-    const container = scrollRef.current;
-    const itemHeight = container?.children[0]?.clientHeight || 1;
-    container?.scrollTo({ top: index * itemHeight, behavior: "smooth" });
-    setScrollIndex(index);
+  const handleArrowClick = (direction: "left" | "right") => {
+    if (direction === "left" && currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    } else if (direction === "right" && currentIndex < originalSongs.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
   };
 
-  const handleWheel = (e: WheelEvent) => {
-    if (cooldown) return;
-
-    setCooldown(true);
-    setTimeout(() => setCooldown(false), 1000);
-
-    const direction = e.deltaY > 0 ? 1 : -1;
-    scrollToIndex(scrollIndex + direction);
-  };
-
-  const handleSongClick = (song: Song) => {
-    console.log(`Selected song: ${song.name} by ${song.artist}`);
-    select(song.id);
-  };
-
-  const handleSelectClick = () => {
-      const song = originalSongs.find((x) => x.id == selected);
-      if (!song) return;
-  
-      setLevel(song.id);
+  const handleScroll = (e: WheelEvent) => {
+    if (e.deltaY < 0) {
+      handleArrowClick("left");
+    } else if (e.deltaY > 0) {
+      handleArrowClick("right");
+    }
   };
 
   useEffect(() => {
-    const container = scrollRef.current;
-    if (!container) return;
-    const itemHeight = container.children[0]?.clientHeight || 0;
-    container.scrollTop = scrollIndex * itemHeight;
-
-    const handleWheelBound = (e: WheelEvent) => handleWheel(e);
-    container.addEventListener("wheel", handleWheelBound, { passive: false });
-
-    const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key === "s") {
-        handleSelectClick();
-      }
-    };
-    window.addEventListener("keydown", handleKeyPress);
+    window.addEventListener("wheel", handleScroll);
 
     return () => {
-      container.removeEventListener("wheel", handleWheelBound);
-      window.removeEventListener("keydown", handleKeyPress);
+      window.removeEventListener("wheel", handleScroll);
     };
-  }, [scrollIndex, cooldown, selected]);
+  }, [currentIndex]);
+
+  const handleSelectClick = () => {
+    const selectedSong = originalSongs[currentIndex];
+    setLevel(selectedSong.id);
+  };
 
   return (
-    <div className="game"> 
+    <div className="game">
       <div className="game-content">
         <img
           src="songselect.png"
           alt="Select a Song"
           className="song-select-title"
         />
-        <div className="carousel-viewport" ref={scrollRef}>
-          {loopedSongs.map((song, i) => {
-            const distance = Math.abs(i - scrollIndex);
-            const opacity = Math.max(1 - distance * 0.4, 0);
-            const scale = Math.max(1 - distance * 0.05, 0.9);
-            const isActive = i === scrollIndex;
+        <div className="carousel-container">
+          <button
+            className="arrow left-arrow"
+            onClick={() => handleArrowClick("left")}
+            disabled={currentIndex === 0}
+          >
+            &#8249;
+          </button>
+          <div className="carousel-viewport">
+            {originalSongs.map((song, i) => {
+              const isActive = i === currentIndex;
 
-            return (
+              return (
                 <div
-                key={`${song.id}-${i}`}
-                className={`carousel-song ${isActive ? "active" : ""}`}
-                style={{
-                  opacity,
-                  transform: `scale(${scale})`,
-                  fontWeight: isActive ? "bold" : "normal",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                  height: "100px",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-                onClick={() => handleSongClick(song)}
-                >
-                <div
-                  className="song-title"
+                  key={song.id}
+                  className={`carousel-song ${isActive ? "active" : ""}`}
                   style={{
-                  fontSize: "1rem",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
+                    display: isActive ? "flex" : "none",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "150px",
+                    width: "300px",
+                    backgroundColor: isActive ? "#8f48b7" : "#54bed8",
+                    border: "2px solid #444",
+                    borderRadius: "12px",
+                    textAlign: "center",
+                    color: "#fff",
+                    transition: "all 0.3s ease",
                   }}
                 >
-                  {song.name}
+                  <div className="song-title" style={{ fontSize: "1.2rem" }}>
+                    {song.name}
+                  </div>
+                  <div className="song-details" style={{ fontSize: "0.9rem" }}>
+                    {song.artist}
+                  </div>
                 </div>
-                <div
-                  className="song-details"
-                  style={{
-                  fontSize: "0.8rem",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                  }}
-                >
-                  {song.artist}
-                </div>
-                </div>
-            );
-          })}
+              );
+            })}
+          </div>
+          <button
+            className="arrow right-arrow"
+            onClick={() => handleArrowClick("right")}
+            disabled={currentIndex === originalSongs.length - 1}
+          >
+            &#8250;
+          </button>
         </div>
         <img
           src="select.png"
           alt="Select"
           className="back-image"
-          onClick={() => handleSelectClick()}
+          onClick={handleSelectClick}
         />
         <img
           src="back.png"

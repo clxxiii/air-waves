@@ -133,7 +133,7 @@
     cursor: pointer;
     transition: transform 0.3s ease;
     position: relative;
-    margin-top: 80px;
+    margin-top: 60px;
     margin-bottom: 10px; 
     transform: translate(-50%, -50%);
     left: 17%;
@@ -216,31 +216,43 @@
   }
   .carousel-container {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    justify-content: center;
     position: relative;
-    margin: 2rem 0;
+    width: 100%;
+    max-width: 400px; /* Adjusted for single card display */
+    margin: 20px auto;
   }
   
-  .carousel-item {
+  .carousel-viewport {
+    display: flex;
+    overflow: hidden; /* Hide other cards */
+    width: 100%;
+    justify-content: center; /* Center the active card */
+  }
+  
+  .carousel-song {
+    flex-shrink: 0;
+    width: 100%; /* Ensure only one card is visible */
+    max-width: 300px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     background-color: #222;
     border: 2px solid #444;
     border-radius: 12px;
-    width: 280px;
-    padding: 2rem;
+    margin: 0 auto;
     text-align: center;
-    transition: opacity 0.4s ease;
     color: #fff;
+    transition: transform 0.3s ease, opacity 0.3s ease;
   }
   
-  .fade {
-    animation: fadeInOut 0.4s;
-  }
-  
-  @keyframes fadeInOut {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
+  .carousel-song.active {
+    transform: scale(1.1); /* Highlight active card */
+    border-color: #8f48b7; /* Purple border for active card */
+    background-color: #54bed8; /* Blue background for active card */
   }
   
   .arrow {
@@ -256,64 +268,12 @@
     transform: scale(1.2);
   }
   
-  .carousel-viewport {
-    height: 180px; 
-    overflow-y: scroll;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 10px 0;
-    z-index: 2;
-    position: relative;
+  .left-arrow {
+    position: absolute;
+    left: -50px;
   }
   
-  .carousel-song {
-    height: 50px;
-    flex-shrink: 0;
-    scroll-snap-align: center;
-    background-color: #222;
-    border: 2px solid #444;
-    border-radius: 12px;
-    padding: 2rem;
-    width: 280px;
-    margin: 0 auto;
-    text-align: center;
-    color: #fff;
-    transition: opacity 0.2s ease, transform 0.2s ease, font-weight 0.2s ease;
-    opacity: 0.25;
-    transform: scale(0.95);
-    font-weight: normal;
-  }
-  
-  
-  .carousel-song:has(+ .carousel-song:nth-child(2)) {
-    opacity: 0;
-    transform: scale(1);
-  }
-  
-  .carousel-viewport {
-    height: 200px;
-    overflow-y: auto;
-    scroll-behavior: smooth;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    padding: 0;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    overscroll-behavior: none;
-  }
-  
-  .carousel-viewport::-webkit-scrollbar {
-    display: none;
-  }
-  
-  .song-select-title {
-    width: 350px;
-    height: auto;
-    margin-bottom: -10%;
-    margin-left: 330px;
-    margin-top: 50px;
-    animation: rock 2s steps(2) infinite;
+  .right-arrow {
+    position: absolute;
+    right: -50px;
   }
