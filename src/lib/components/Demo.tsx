@@ -1,6 +1,4 @@
 import Tile from "./Tile";
-import HandTrackingCanvas from "./HandTrackingCanvas";
-import { FingerStateProvider } from "../context/FingerStateContext";
 import { Canvas, useThree } from "@react-three/fiber";
 
 type Props = {
@@ -31,23 +29,16 @@ function Demo(props: Props) {
         Back
       </button>
 
-      <FingerStateProvider>
-        <div className="w-screen h-screen">
-          <Canvas>
-            <Three />
+      <div className="w-screen h-screen">
+        <Canvas>
+          <Three />
 
-            <Tile name="indexFinger" color={0x54bed8} position={[-4, -1, 0]} />
-            <Tile
-              name="middleFinger"
-              color={0xe15971}
-              position={[-1.3, -1, 0]}
-            />
-            <Tile name="ringFinger" color={0xffe113} position={[1.3, -1, 0]} />
-            <Tile name="pinky" color={0x8f48b7} position={[4, -1, 0]} />
-          </Canvas>
-        </div>
-        <HandTrackingCanvas />
-      </FingerStateProvider>
+          <Tile name="indexFinger" color={0x54bed8} position={[-4, -1, 0]} />
+          <Tile name="middleFinger" color={0xe15971} position={[-1.3, -1, 0]} />
+          <Tile name="ringFinger" color={0xffe113} position={[1.3, -1, 0]} />
+          <Tile name="pinky" color={0x8f48b7} position={[4, -1, 0]} />
+        </Canvas>
+      </div>
     </>
   );
 }

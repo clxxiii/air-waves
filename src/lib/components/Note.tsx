@@ -1,6 +1,12 @@
 import { ThreeElements } from "@react-three/fiber";
 import { useContext, useEffect, useState } from "react";
-import { SettingsContext, TimePositionContext } from "../contexts";
+import { TimePositionContext } from "../contexts";
+
+const settings = {
+  noteSpeed: 5000,
+  approachDistance: 100,
+  fadeDistance: 40
+};
 
 function SingleNote(
   props: ThreeElements["mesh"] & { color: number; fade: number }
@@ -20,19 +26,20 @@ function SingleNote(
 function Note(props: { note: ChartFile.Note }) {
   const { note } = props;
   const [timePosition] = useContext(TimePositionContext);
-  const settings = useContext(SettingsContext);
+  // const settings = useContext(SettingsContext);
 
   const [z, setZ] = useState(0);
   const [fade, setFade] = useState(1);
 
   useEffect(() => {
-    const a =
+    const z =
       -1 *
       settings.approachDistance *
       ((note.ms - timePosition) / settings.noteSpeed);
-    setFade(1 - Math.max(a - settings.fadeDistance, 0));
-    setZ(a);
-  }, [settings, note, timePosition]);
+    // setFade(1 - Math.max(z - settings.fadeDistance, 0));
+    setFade(0.5);
+    setZ(z);
+  }, [note, timePosition]);
 
   return (
     <>

@@ -2,10 +2,10 @@ import React, { useEffect, useContext } from "react";
 import * as tf from "@tensorflow/tfjs";
 import * as handpose from "@tensorflow-models/handpose";
 import "@tensorflow/tfjs-backend-webgl";
-import { FingerStateContext } from "../context/FingerStateContext";
+import { useFingerContext } from "../context/FingerStateContext";
 
 const HandTrackingCanvas = () => {
-  const { setFingerInRange } = useContext(FingerStateContext);
+  const { setFingerInRange } = useFingerContext();
 
   const processHandData = (predictions) => {
     if (predictions.length > 0) {

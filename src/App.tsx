@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
-import HitWindow from "./lib/components/HitWindow";
-import { SettingsContext } from "./lib/contexts";
 import Notes from "./lib/components/Notes";
 import Menu from "./lib/components/Menu.tsx";
 import Game from "./lib/components/Game";
@@ -54,17 +52,7 @@ function App() {
           <Canvas>
             <Three />
             <Lighting />
-            <SettingsContext.Provider
-              value={{
-                playfieldDimensions: [12, 8],
-                noteSpeed: 5000,
-                approachDistance: 100,
-                fadeDistance: 40
-              }}
-            >
-              <HitWindow />
-              {level != undefined && <Notes level={level} />}
-            </SettingsContext.Provider>
+            {level != undefined && <Notes level={level} />}
           </Canvas>
         ) : (
           <div className="App">
