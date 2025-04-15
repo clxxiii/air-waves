@@ -12,7 +12,7 @@ function Notes(props: { level: string }) {
   const [timePosition, setTimePosition] = useState(0);
   const [loading, load] = useState(false);
   const [chart, setChart] = useState<ChartFile.Chart | null>(null);
-  const interval = useRef<number | null>(null);
+  const interval = useRef<NodeJS.Timeout | null>(null);
   const audio = new Audio();
 
   const start = () => {

@@ -42,7 +42,7 @@ function App() {
   const [screen, setScreen] = useState<"menu" | "game" | "score" | "demo">(
     "menu"
   );
-  const [score, setScore] = useState(100);
+  const [score, _setScore] = useState(100);
   const [level, setLevel] = useState<string | null>(null);
   const distanceState = useState<number[]>([]);
 

@@ -2,7 +2,7 @@ import React from 'react';
 
 type Props = {
   score: number;
-  setScreen: React.Dispatch<React.SetStateAction<'menu' | 'game' | 'score'>>;
+  setScreen: React.Dispatch<React.SetStateAction<'menu' | 'game' | 'score' | 'demo'>>;
 };
 
 const Score = ({ score, setScreen }: Props) => {

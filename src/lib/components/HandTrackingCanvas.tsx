@@ -13,9 +13,9 @@ function HandTracker () {
   const video = { current: document.createElement("video") };
 
 
-  const [fingers, setFingers] = useState<[string, number, number][]>([]);
+  const [_fingers, setFingers] = useState<[string, number, number][]>([]);
   const [started, start] = useState(false);
-  const [distances, setDistances] = useDistanceContext();
+  const [_distances, setDistances] = useDistanceContext();
 
   const toggleCamera = () => {
     if (started) {
@@ -32,6 +32,8 @@ function HandTracker () {
     if (!video.current) return;
 
     video.current.pause();
+
+    //@ts-expect-error Typescript is wrong, getTracks() does exist, it has the type wrong.
     const tracks: MediaStreamTrack[] = video.current.srcObject?.getTracks();
     if (tracks) tracks.forEach((src) => src.stop());
     video.current.srcObject = null;
