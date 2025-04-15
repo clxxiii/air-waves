@@ -1,18 +1,69 @@
 import { ThreeElements } from "@react-three/fiber";
 import { useFingerContext } from "../context/FingerStateContext";
+import { useState, useEffect } from "react";
 
 type Finger = "indexFinger" | "middleFinger" | "ringFinger" | "pinky";
 
 function Tile(props: ThreeElements["mesh"] & { color: number; name: Finger }) {
   const { color, name } = props;
-
   const { fingerInRange } = useFingerContext();
+  const [isArrowKeyActive, setIsArrowKeyActive] = useState(false);
+
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      switch (event.key) {
+        case "ArrowLeft":
+          if (name === "indexFinger") setIsArrowKeyActive(true);
+          break;
+        case "ArrowUp":
+          if (name === "middleFinger") setIsArrowKeyActive(true);
+          break;
+        case "ArrowRight":
+          if (name === "pinky") setIsArrowKeyActive(true); 
+          break;
+        case "ArrowDown":
+          if (name === "ringFinger") setIsArrowKeyActive(true); 
+          break;
+        default:
+          break;
+      }
+    };
+
+    const handleKeyRelease = (event: KeyboardEvent) => {
+      switch (event.key) {
+        case "ArrowLeft":
+          if (name === "indexFinger") setIsArrowKeyActive(false);
+          break;
+        case "ArrowUp":
+          if (name === "middleFinger") setIsArrowKeyActive(false);
+          break;
+        case "ArrowRight":
+          if (name === "pinky") setIsArrowKeyActive(false); // Switched with pinky
+          break;
+        case "ArrowDown":
+          if (name === "ringFinger") setIsArrowKeyActive(false); // Switched with ring finger
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    window.addEventListener("keyup", handleKeyRelease);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+      window.removeEventListener("keyup", handleKeyRelease);
+    };
+  }, [name]);
+
+  const isActive = fingerInRange[name] || isArrowKeyActive;
 
   return (
-    <mesh {...props} scale={[1, fingerInRange[name] ? 0.8 : 1, 1]}>
-      <boxGeometry args={[1.5, fingerInRange[name] ? 0.2 : 0.1, 1]} />
+    <mesh {...props} scale={[1, isActive ? 0.8 : 1, 1]}>
+      <boxGeometry args={[1.5, isActive ? 0.2 : 0.1, 1]} />
       <meshStandardMaterial
-        color={fingerInRange[name] ? `#${color.toString(16)}` : "rgba(0,0,0)"}
+        color={isActive ? `#${color.toString(16)}` : "rgba(0,0,0)"}
         transparent={true}
       />
     </mesh>

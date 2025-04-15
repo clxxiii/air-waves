@@ -1,27 +1,27 @@
 import { ThreeElements } from "@react-three/fiber";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, memo } from "react";
 import { TimePositionContext } from "../contexts";
 
 const settings = {
   noteSpeed: 5000,
   approachDistance: 100,
-  fadeDistance: 40
+  fadeDistance: 40,
 };
 
-function SingleNote(
-  props: ThreeElements["mesh"] & { color: number; fade: number }
-) {
-  return (
-    <mesh {...props}>
-      <sphereGeometry args={[0.5]} />
-      <meshStandardMaterial
-        color={props.color}
-        opacity={props.fade}
-        transparent={true}
-      />
-    </mesh>
-  );
-}
+const SingleNote = memo(
+  (props: ThreeElements["mesh"] & { color: number; fade: number }) => {
+    return (
+      <mesh {...props}>
+        <sphereGeometry args={[0.5, 16, 16]} /> 
+        <meshStandardMaterial
+          color={props.color}
+          opacity={props.fade}
+          transparent={true}
+        />
+      </mesh>
+    );
+  }
+);
 
 function Note(props: { note: ChartFile.Note }) {
   const { note } = props;
@@ -37,7 +37,7 @@ function Note(props: { note: ChartFile.Note }) {
       settings.approachDistance *
       ((note.ms - timePosition) / settings.noteSpeed);
     // setFade(1 - Math.max(z - settings.fadeDistance, 0));
-    setFade(0.5);
+    setFade(1 - Math.max(z - settings.fadeDistance, 0) / settings.fadeDistance); 
     setZ(z);
   }, [note, timePosition]);
 
