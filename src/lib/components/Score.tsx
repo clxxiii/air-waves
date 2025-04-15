@@ -1,5 +1,4 @@
 import React from 'react';
-import youRockImage from '../../../public/yourock.png';
 
 type Props = {
   score: number;
@@ -11,7 +10,7 @@ const Score = ({ score, setScreen }: Props) => {
     <div style={{ textAlign: 'center', marginTop: '50px' }}>
       <h1>Congratulations!</h1>
       <h2>Your Score: {score}%</h2>
-      <img src={youRockImage} alt="You Rock" style={{ width: '300px', marginTop: '20px' }} />
+      <img src="/yourock.png" alt="You Rock" style={{ width: '300px', marginTop: '20px' }} />
       <br />
       <button onClick={() => setScreen('menu')} style={{ marginTop: '30px' }}>Back to Menu</button>
     </div>
