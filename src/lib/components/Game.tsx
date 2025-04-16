@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import base from "../base";
 
 type Song = {
   id: string;
@@ -56,7 +57,7 @@ const Game = ({ setScreen, setLevel }: Props) => {
     <div className="game">
       <div className="game-content">
         <img
-          src="songselect.png"
+          src={`${base}/songselect.png`}
           alt="Select a Song"
           className="song-select-title"
         />
@@ -110,13 +111,13 @@ const Game = ({ setScreen, setLevel }: Props) => {
           </button>
         </div>
         <img
-          src="select.png"
+          src={`${base}/select.png`}
           alt="Select"
           className="back-image"
           onClick={handleSelectClick}
         />
         <img
-          src="back.png"
+          src={`${base}/back.png`}
           alt="Back to Menu"
           className="back-image"
           onClick={() => setScreen("menu")}

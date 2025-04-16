@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { TimePositionContext } from "../contexts";
 import Note from "./Note";
 import Tile from "./Tile";
+import base from "../base";
 import { parse } from "../ChartParser";
 import HandTrackingCanvas from "./HandTrackingCanvas";
 
@@ -21,7 +22,7 @@ function Notes(props: { level: string }) {
     Promise.all([
       // Get chart file
       new Promise<ChartFile.Chart>((resolve) => {
-        fetch(`/${level}/waves.chart`).then((r) => {
+        fetch(`${base}/${level}/waves.chart`).then((r) => {
           r.text().then((text) => {
             const parsed = parse(text);
             resolve(parsed);
@@ -30,7 +31,7 @@ function Notes(props: { level: string }) {
       }),
       // Get song file
       new Promise<HTMLAudioElement>((resolve) => {
-        audio.src = `/${level}/song.ogg`;
+        audio.src = `${base}/${level}/song.ogg`;
         audio.addEventListener("canplay", () => resolve(audio));
       })
     ])
