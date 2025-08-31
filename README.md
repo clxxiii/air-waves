@@ -38,3 +38,10 @@ cd airwaves
 
 # Install dependencies
 npm install
+```
+Running Locally
+```
+npm run dev
+```
+- Open http://localhost:5173 in your browser.
+- Make sure your webcam is enabled.
