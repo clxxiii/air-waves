@@ -1,54 +1,40 @@
-# React + TypeScript + Vite
+# Airwaves
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Airwaves is a rhythm game controlled with your hand using TensorFlow.js.  
+The game uses your webcam to track gestures in real time, letting you play hands-free by hitting notes, navigating menus, and controlling gameplay.
 
-Currently, two official plugins are available:
+**Winner of "Best Gamified Hack" at Bitcamp 2025**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**Live Demo:** [https://airwaves.vercel.app/](https://airwaves.vercel.app/)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Features
+- Webcam-based hand gesture controls
+- 3D visuals built with React Three Fiber and Three.js
+- Hands-free navigation and utility gestures with OpenCV.js
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-      tsconfigRootDir: import.meta.dirname
-    }
-  }
-});
-```
+## Tech Stack
+- TensorFlow.js (HandPose model for gesture detection)
+- React + TypeScript
+- Three.js (via React Three Fiber)
+- OpenCV.js
+- CSS animations
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
+## Getting Started
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    "react-x": reactX,
-    "react-dom": reactDom
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs["recommended-typescript"].rules,
-    ...reactDom.configs.recommended.rules
-  }
-});
-```
+### Prerequisites
+- Node.js (v18 or higher recommended)
+- npm (comes with Node.js) or yarn
+
+### Installation
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/airwaves.git
+cd airwaves
+
+# Install dependencies
+npm install
