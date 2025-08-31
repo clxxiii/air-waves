@@ -45,9 +45,6 @@ function App() {
   const [score, _setScore] = useState(100);
   const [level, setLevel] = useState<string | null>(null);
   const distanceState = useState<number[]>([]);
-  const handleMiss = () => {
-    console.log("Miss");
-  }; //Adding a miss image or text overlay causes so much lag :'(
 
   return (
     <div className="h-screen w-screen absolute top-0 left-0">
@@ -56,7 +53,7 @@ function App() {
           <Canvas>
             <Three />
             <Lighting />
-            {level != undefined && <Notes level={level} onMiss={handleMiss} />}
+            {level != undefined && <Notes level={level} />}
           </Canvas>
         ) : (
           <div className="App">

@@ -23,12 +23,13 @@ const SingleNote = memo(
   }
 );
 
-function Note(props: { note: ChartFile.Note; onNoteReachedZ: (note: ChartFile.Note) => void }) {
-  const { note, onNoteReachedZ } = props;
+function Note(props: { note: ChartFile.Note }) {
+  const { note } = props;
   const [timePosition] = useContext(TimePositionContext);
+  // const settings = useContext(SettingsContext);
+
   const [z, setZ] = useState(0);
   const [fade, setFade] = useState(1);
-  const [hasReachedZ, setHasReachedZ] = useState(false);
 
   useEffect(() => {
     const z =
@@ -38,12 +39,7 @@ function Note(props: { note: ChartFile.Note; onNoteReachedZ: (note: ChartFile.No
     // setFade(1 - Math.max(z - settings.fadeDistance, 0));
     setFade(1 - Math.max(z - settings.fadeDistance, 0) / settings.fadeDistance); 
     setZ(z);
-
-    if (Math.abs(z) < 0.2 && !hasReachedZ) {
-      onNoteReachedZ(note);
-      setHasReachedZ(true);
-    }
-  }, [note, timePosition, hasReachedZ, onNoteReachedZ]);
+  }, [note, timePosition]);
 
   return (
     <>
